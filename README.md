@@ -69,6 +69,7 @@ cx push --force                   # 6. 推送待办提醒
 | `cx mixed <课程> <作业> <choices.json> <images.json>` | 混合卷一趟做完 |
 | `cx push [--force] [--dry]` | 推送待办提醒（横幅） |
 | `cx submit <课程> <作业> --yes` | **提交**（不可逆，需 `--yes`） |
+| `node scripts/choice-fill.js … --submit --yes` | 选择题作答并提交（同样需 `--yes`） |
 
 ### 答案文件格式
 
