@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 // 学习通线上作业作答 v2:选择题(单选/多选/判断)+ 连线题
-// 用法: node hw-answer2.js <课程关键字> <作业名> <答案JSON> [--click] [--submit] [--tag=x]
+// 用法: node choice-fill.js <课程关键字> <作业名> <答案JSON> [--click] [--submit --yes] [--tag=x]
+// 默认只做「暂时保存」；--submit 还必须再加 --yes 才会真的提交(不可逆)
 const { chromium } = require('../lib/playwright');
 const path = require('path'); const fs = require('fs');
 const { COOKIES: COOKIE_FILE, PROFILE, OUT: OUTDIR } = require('../lib/config');
 
 const KEY = process.argv[2], WORK = process.argv[3], ANSFILE = process.argv[4];
 const CLICK = process.argv.includes('--click');
-const SUBMIT = process.argv.includes('--submit');
+const SUBMIT = process.argv.includes('--submit') && process.argv.includes('--yes');
+const WANT_SUBMIT = process.argv.includes('--submit') && !process.argv.includes('--yes');
 const TAGARG = process.argv.find(a => a.startsWith('--tag='));
 const TAG = TAGARG ? TAGARG.split('=')[1] : WORK.replace(/[^\w.-]/g, '_');
 const ANS = JSON.parse(fs.readFileSync(ANSFILE, 'utf8'));
@@ -175,6 +177,20 @@ async function snapshot(wp) {
   log('截图:', shot);
   fs.writeFileSync(path.join(OUTDIR, 'hw2-ans-' + TAG + '.json'), JSON.stringify({ url: wp.url().slice(0, 200), before, after }, null, 1));
 
+  // 先「暂时保存」，把选择落服务端（提交与否都要保存）
+  const saved = await wp.evaluate(() => {
+    const t = [...document.querySelectorAll('a, button, div, span')].find(e =>
+      (e.innerText || '').trim() === '暂时保存' && e.offsetParent !== null
+      && !e.closest('[class*="dialog"], [class*="mask"], .pop'));
+    if (t) { t.click(); return 'OK'; }
+    return 'NO_BUTTON';
+  });
+  log('暂时保存:', saved);
+  await wp.waitForTimeout(4000);
+
+  if (WANT_SUBMIT) {
+    log('⚠ 已指定 --submit 但缺少 --yes，跳过提交（只保存）');
+  }
   if (SUBMIT && bad === 0) {
     log('=== 提交 ===');
     await wp.evaluate(() => { const t = [...document.querySelectorAll('a, button, div, span')].find(e => (e.innerText || '').trim() === '提交' && e.offsetParent !== null && !e.closest('[class*="dialog"], [class*="mask"], .pop')); if (t) t.click(); });
