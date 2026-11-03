@@ -3,6 +3,8 @@
 # 用法:
 #   bash scripts/install-skill.sh                 # 装到 ~/.dsh/skills 与 ~/.claude/skills
 #   bash scripts/install-skill.sh <目标目录>       # 装到指定目录
+#
+# 已存在同名技能时自动备份成 <目录>.bak-<时间戳>，不覆盖用户正在用的版本。
 set -euo pipefail
 
 SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -11,14 +13,19 @@ if [ $# -ge 1 ]; then
   TARGETS=("$@")
 else
   TARGETS=()
-  [ -d "$HOME/.dsh/skills" ] || mkdir -p "$HOME/.dsh/skills"
+  mkdir -p "$HOME/.dsh/skills"
   TARGETS+=("$HOME/.dsh/skills/chaoxing-homework")
-  [ -d "$HOME/.claude/skills" ] || mkdir -p "$HOME/.claude/skills"
+  mkdir -p "$HOME/.claude/skills"
   TARGETS+=("$HOME/.claude/skills/chaoxing-homework")
 fi
 
 for T in "${TARGETS[@]}"; do
   echo "→ 安装到 $T"
+  if [ -f "$T/SKILL.md" ]; then
+    BAK="$T.bak-$(date +%Y%m%d-%H%M%S)"
+    mv "$T" "$BAK"
+    echo "  已存在旧版本，备份到 $BAK"
+  fi
   mkdir -p "$T"
   cp -R "$SRC/SKILL.md" "$T/"
   cp -R "$SRC/scripts" "$T/"
