@@ -1,0 +1,29 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: 语法检查
+        run: |
+          for f in bin/*.js lib/*.js scripts/*.js; do
+            node --check "$f" || exit 1
+          done
+      - name: 隐私检查（不得出现个人路径/凭证）
+        run: |
+          if grep -rnE '/Users/[a-z]+/|rockyguo|agent-bridge|Desktop/对话记录' \
+               --exclude-dir=node_modules --exclude-dir=.github \
+               --include='*.js' --include='*.md' --include='*.json' . ; then
+            echo '检测到个人路径，请清理后再提交'; exit 1
+          fi
+      - name: 确认登录态与结果文件未被跟踪
+        run: |
+          git check-ignore -q cookies.json && git check-ignore -q profile/ && git check-ignore -q result.json

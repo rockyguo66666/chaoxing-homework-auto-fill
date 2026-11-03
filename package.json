@@ -1,0 +1,40 @@
+{
+  "name": "cx-chaoxing-homework",
+  "version": "1.0.0",
+  "description": "学习通(超星)作业自动化：扫描未交作业、抓题、按题型分流作答、只暂存不提交",
+  "keywords": [
+    "chaoxing",
+    "超星",
+    "学习通",
+    "homework",
+    "automation",
+    "playwright",
+    "skill"
+  ],
+  "license": "MIT",
+  "main": "bin/cx.js",
+  "bin": {
+    "cx": "bin/cx.js"
+  },
+  "scripts": {
+    "login": "node scripts/relogin.js",
+    "scan": "node scripts/scan.js",
+    "list": "node scripts/summarize.js",
+    "push": "node scripts/push.js",
+    "cx": "node bin/cx.js"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "scripts",
+    "references",
+    "SKILL.md",
+    "README.md"
+  ]
+}

@@ -1,0 +1,22 @@
+# —— 登录态与个人信息：绝对不要提交 ——
+cookies.json
+profile/
+profile2/
+profile/
+*.cookies.json
+qr.png
+
+# —— 扫描结果与本机数据 ——
+result.json
+last-summary.txt
+ignore-list.json
+push-state.json
+runs/
+skill-runs/
+*.png
+!examples/**/*.png
+
+# —— 依赖与工具 ——
+node_modules/
+npm-debug.log*
+.DS_Store
