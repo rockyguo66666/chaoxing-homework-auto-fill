@@ -27,6 +27,32 @@ metadata:
 
 「步骤字数」= 准备写进答题框的答案正文字符数。
 
+## 如何使用本技能
+
+本技能自带全部脚本，**不需要另外安装任何技能或工具**。
+
+```bash
+# 安装成智能体技能（DeepSeek Harness / Claude Code 等通用）
+bash scripts/install-skill.sh              # 装到 ~/.dsh/skills 与 ~/.claude/skills
+bash scripts/install-skill.sh <目标目录>    # 或装到指定位置
+
+# 装好后命令有两种写法，效果相同：
+node scripts/scan.js          # 直接用脚本
+cx scan                       # 若执行过 npm link
+```
+
+配套的**模拟笔迹**能力已打包在 `skills/handwriting-homework/`：
+采样照片 → 生成个人字库 → 渲染答题纸，全套脚本与说明都在里面，
+首次运行会自动准备 Python 依赖（numpy / Pillow / fontTools）。
+
+
+作为技能安装后，技能目录里就有完整的 `scripts/`；智能体可直接调用：
+
+```bash
+node <技能目录>/scripts/scan.js
+node <技能目录>/scripts/mixed-work.js <课程> <作业> choices.json images.json
+node <技能目录>/scripts/sheet.js 答案.txt --out 图.png --preset 娃娃体
+```
 ## 标准流程
 
 ```

@@ -16,6 +16,10 @@ skill-runs/
 *.png
 !examples/**/*.png
 
+# —— Python 依赖（由 cx sheet 首次运行时自建）——
+.venv/
+__pycache__/
+*.pyc
 # —— 依赖与工具 ——
 node_modules/
 npm-debug.log*

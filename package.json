@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "description": "学习通(超星)作业自动化：扫描未交作业、抓题、按题型分流作答、只暂存不提交",
   "keywords": [
-    "chaoxing",
-    "超星",
-    "学习通",
-    "homework",
+    "DSH",
+    "agent",
     "automation",
+    "chaoxing",
+    "claude-code",
+    "handwriting",
+    "homework",
     "playwright",
-    "skill"
+    "skill",
+    "学习通",
+    "超星"
   ],
   "license": "MIT",
   "main": "bin/cx.js",
@@ -21,7 +25,9 @@
     "scan": "node scripts/scan.js",
     "list": "node scripts/summarize.js",
     "push": "node scripts/push.js",
-    "cx": "node bin/cx.js"
+    "cx": "node bin/cx.js",
+    "postinstall": "playwright install chromium",
+    "sheet": "node scripts/sheet.js"
   },
   "dependencies": {
     "playwright": "^1.40.0"
@@ -30,11 +36,13 @@
     "node": ">=18"
   },
   "files": [
+    "README.md",
+    "SKILL.md",
     "bin",
     "lib",
-    "scripts",
     "references",
-    "SKILL.md",
-    "README.md"
+    "scripts",
+    "scripts/install-skill.sh",
+    "skills"
   ]
 }

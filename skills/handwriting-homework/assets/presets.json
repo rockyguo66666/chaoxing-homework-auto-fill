@@ -1,0 +1,127 @@
+{
+  "_说明": [
+    "字体预设：一套「字体 + 排版手感」的组合，用 --preset 名字 直接套用。",
+    "font_file 会在系统字体目录里按文件名查找（含 AssetsV2 按需下载的字体），所以路径变了也不怕。",
+    "ttf 用于指向自己生成的字体（相对作业目录的路径）。",
+    "命令行给出的参数优先级最高，会覆盖预设里的同名项。"
+  ],
+  "presets": {
+    "娃娃体": {
+      "font_file": "WawaSC-Regular.otf",
+      "font_index": 0,
+      "label": "娃娃体 Wawati SC",
+      "chars_per_line": 26,
+      "line_spacing": 1.62,
+      "rules": "line",
+      "jitter": "mid",
+      "paper_style": "paper",
+      "ink_color": "32,32,44",
+      "ink_alpha": 0.92,
+      "note": "圆胖可爱，偏低龄；写得慢、间距大一点更像"
+    },
+    "翩翩体": {
+      "font_file": "Hanzipen.ttc",
+      "font_index": 0,
+      "label": "翩翩体 HanziPen SC",
+      "chars_per_line": 28,
+      "line_spacing": 1.58,
+      "rules": "line",
+      "jitter": "mid",
+      "paper_style": "paper",
+      "ink_color": "32,32,44",
+      "ink_alpha": 0.92,
+      "note": "最像学生随手写的圆珠笔字"
+    },
+    "手札体": {
+      "font_file": "Hannotate.ttc",
+      "font_index": 0,
+      "label": "手札体 Hannotate SC",
+      "chars_per_line": 28,
+      "line_spacing": 1.58,
+      "rules": "line",
+      "jitter": "mid",
+      "paper_style": "paper",
+      "ink_color": "32,32,44",
+      "ink_alpha": 0.9,
+      "note": "钢笔手写感，笔画有粗细"
+    },
+    "楷体": {
+      "font_file": "Kaiti.ttc",
+      "font_index": 0,
+      "label": "楷体 Kaiti SC",
+      "chars_per_line": 30,
+      "line_spacing": 1.52,
+      "rules": "line",
+      "jitter": "low",
+      "paper_style": "white",
+      "ink_color": "26,26,34",
+      "ink_alpha": 0.92,
+      "note": "端正学生正楷，但偏印刷感"
+    },
+    "行楷": {
+      "font_file": "Xingkai.ttc",
+      "font_index": 0,
+      "label": "行楷 Xingkai SC",
+      "chars_per_line": 28,
+      "line_spacing": 1.6,
+      "rules": "line",
+      "jitter": "mid",
+      "paper_style": "paper",
+      "ink_color": "30,30,42",
+      "ink_alpha": 0.92,
+      "note": "行书，成熟流畅"
+    },
+    "雅痞": {
+      "font_file": "YuppySC-Regular.otf",
+      "font_index": 0,
+      "label": "雅痞 Yuppy SC",
+      "chars_per_line": 26,
+      "line_spacing": 1.62,
+      "rules": "none",
+      "jitter": "mid",
+      "paper_style": "paper",
+      "ink_color": "32,32,44",
+      "ink_alpha": 0.92,
+      "note": "设计感潮字"
+    },
+    "魏碑": {
+      "font_file": "WeibeiSC-Bold.otf",
+      "font_index": 0,
+      "label": "魏碑 Weibei SC",
+      "chars_per_line": 24,
+      "line_spacing": 1.66,
+      "rules": "line",
+      "jitter": "low",
+      "paper_style": "paper",
+      "ink_color": "20,20,24",
+      "ink_alpha": 0.95,
+      "note": "毛笔碑帖味"
+    },
+    "隶变": {
+      "font_file": "Libian.ttc",
+      "font_index": 0,
+      "label": "隶变 Libian SC",
+      "chars_per_line": 26,
+      "line_spacing": 1.62,
+      "rules": "line",
+      "jitter": "low",
+      "paper_style": "paper",
+      "ink_color": "28,28,36",
+      "ink_alpha": 0.93,
+      "note": "隶书"
+    },
+    "圆体": {
+      "font_file": "Yuanti.ttc",
+      "font_index": 0,
+      "label": "圆体 Yuanti SC",
+      "chars_per_line": 30,
+      "line_spacing": 1.54,
+      "rules": "line",
+      "jitter": "low",
+      "paper_style": "paper",
+      "ink_color": "32,32,44",
+      "ink_alpha": 0.92,
+      "note": "圆润，不太像手写"
+    }
+  }
+}

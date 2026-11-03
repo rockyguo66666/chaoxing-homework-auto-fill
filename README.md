@@ -17,17 +17,25 @@
 - **登录态自持**：cookie 与浏览器 profile 都在你自己的目录里，脚本只读自己的会话。
 - **路径全部参数化**：不依赖任何特定用户的家目录。
 
-## 安装
+## 安装（只需要一次 npm install）
 
 ```bash
-git clone <你的仓库地址> cx-chaoxing-homework
+git clone <仓库地址> cx-chaoxing-homework
 cd cx-chaoxing-homework
-npm install            # 会装 playwright
-npx playwright install chromium   # 若用自带 chromium
+npm install            # 会自动装 playwright 并下载浏览器
 ```
 
-浏览器可选：默认 `msedge`（Edge）。用 Chrome 改 `CX_CHANNEL=chrome`，
-用 Playwright 自带的 Chromium 改 `CX_CHANNEL=bundled`。
+**不用再装别的东西**：
+
+- 浏览器：`npm install` 的 postinstall 会自动下载 Playwright 自带的 Chromium；
+  想用系统里已有的 Chrome/Edge，设 `CX_CHANNEL=chrome` 或 `CX_CHANNEL=msedge` 即可。
+- 手写答题纸渲染所需的 Python 依赖（numpy / Pillow / fontTools）：
+  `cx sheet` **首次运行自动建 venv 并安装**，之后直接用；
+  若你的系统 python 已经带这些库，会直接复用，连 venv 都不建。
+- 想模拟本人笔迹（采样照片 → 生成个人字库）：`skills/handwriting-homework/` 里已包含全套脚本与说明。
+
+> 需要 Python 3.8+（系统自带即可）。完全不想装 Python 时，
+> 选择题/打字作答这条路不需要 Python，照常可用。
 
 ## 快速开始
 
@@ -40,6 +48,8 @@ cx grab 高等数学 第三章作业        # 4. 抓题：每题出图 + questio
 #   然后按题型写 answers.json / choices.json
 cx mixed 高等数学 第三章作业 choices.json images.json   # 5. 填答并暂存
 cx push --force                   # 6. 推送待办提醒
+cx sheet 第1题.txt --out 答题纸.png --preset 娃娃体   # 6. 出手写答题纸图
+cx push --force                   # 7. 推送待办提醒
 ```
 
 所有配置通过环境变量，默认落在 `~/.chaoxing-homework`：
@@ -91,25 +101,34 @@ cx push --force                   # 6. 推送待办提醒
 { "6": "/abs/path/答题纸-第6题.png" }
 ```
 
-## 给 AI Agent 用：技能形态
+## 给 AI Agent 用：装成智能体技能
 
-把本目录当作 skill 安装（Claude Code / DSH 等都吃 `SKILL.md`）：
+本包自带全部脚本与配套的模拟笔迹能力，**装上就能用，不需要再装别的技能**。
 
-- `SKILL.md` —— 题型分流规则、标准流程、实测踩坑清单
-- `scripts/` —— 上面的全部脚本
-- `references/` —— 更细的专题文档
+```bash
+# 一键装成技能：DeepSeek Harness 与 Claude Code 都会自动认到
+bash scripts/install-skill.sh
 
-分流规则（决定一道解答题该打字还是出图）：
+# 或装到指定位置（任何支持 SKILL.md 的框架都行）
+bash scripts/install-skill.sh ~/.dsh/skills/chaoxing-homework
+```
 
-| 情况 | 做法 |
-|---|---|
-| 选择/判断 | 直接点选填入 |
-| 物理 / 数学类解答计算题 | 一律出手写答题纸图片 |
-| 其他解答填空题，步骤 ≤1000 字 | 手写答题纸图片 |
-| 其他解答填空题，步骤 >1000 字 | 直接打字 |
+装好后：
 
-手写答题纸图片可以用任意渲染管线生成（本仓库不绑定特定字体），
-也可以配合 `handwriting-homework` 这类技能做「本人字迹」渲染。
+- 智能体侧：框架读取技能目录里的 `SKILL.md` 即可（DeepSeek Harness 的 `~/.dsh/skills/`、
+  Claude Code 的 `~/.claude/skills/` 都在安装脚本的默认目标里）。
+- 命令行侧：在仓库里执行 `npm link` 就能直接用 `cx` 命令；
+  不 link 也可以 `node bin/cx.js <命令>`，或在技能目录里 `node scripts/*.js`。
+
+技能包里包含：
+
+```
+SKILL.md                     题型分流 + 标准流程 + 踩坑清单（智能体读这个）
+scripts/                     扫描/抓题/填答/插图/混合卷/推送/提交/渲染
+lib/                         路径与浏览器、通知的公共层
+references/                  踩坑与分流细则
+skills/handwriting-homework/ 模拟笔迹：采样照片→生成个人字库→渲染答题纸
+```
 
 ## 定时提醒
 

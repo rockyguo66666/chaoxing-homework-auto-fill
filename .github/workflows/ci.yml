@@ -12,6 +12,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: Python 语法检查（手写渲染管线）
+        run: |
+          for f in skills/handwriting-homework/scripts/*.py; do
+            python3 -m py_compile "$f" || exit 1
+          done
       - name: 语法检查
         run: |
           for f in bin/*.js lib/*.js scripts/*.js; do

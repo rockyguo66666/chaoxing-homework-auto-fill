@@ -38,6 +38,7 @@ function help() {
     '  cx img <课程> <作业> <题号> <png>  插图 → 暂时保存',
     '  cx mixed <课程> <作业> <c.json> <i.json>  混合卷 → 暂时保存',
     '  cx push [--force] [--dry]      推送待办提醒',
+    '  cx sheet <答案.txt> --out <图.png>   把手写答题纸渲染成图片',
     '  cx submit <课程> <作业> --yes 提交作业（危险）',
     '',
     '环境变量：CX_HOME CX_PROFILE CX_COOKIES CX_RESULT CX_OUT CX_CHANNEL CX_HEADLESS',
@@ -56,6 +57,7 @@ switch (cmd) {
   case 'fill':    run('fill-save.js', rest); break;
   case 'img':     run('insert-img.js', rest); break;
   case 'mixed':   run('mixed-work.js', rest); break;
+  case 'sheet':   run('sheet.js', rest); break;
   case 'push':    run('push.js', rest); break;
   case 'submit':  run('submit.js', rest); break;
   case undefined:
