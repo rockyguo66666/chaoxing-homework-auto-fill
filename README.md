@@ -9,6 +9,9 @@
 - 默认**只「暂时保存」绝不提交**，提交需用户明确要求并确认
 - 每天自动推送未交清单（含距截止天数），不重复打扰
 
+> 仓库地址：https://github.com/rockyguo66666/chaoxing-homework-auto-fill  
+> GitHub 仓库名不接受中文，中文名放在仓库简介与标题里。
+
 ## 一句话安装
 
 ```bash
