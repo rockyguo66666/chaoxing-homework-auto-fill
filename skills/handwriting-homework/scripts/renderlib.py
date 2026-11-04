@@ -294,8 +294,11 @@ def composite(paper, ink, color=DEFAULT_INK, alpha=0.92):
 QA_ANSWER_PREFIXES = ("答：", "答:", "答.", "A:", "A：", "答案：", "答案:")
 
 
-def parse_qa(text):
+def parse_qa(text, keep_lines=False):
     """极简解析：支持「1. 题干」+「答：内容」，也支持只有答案的编号段落。
+
+    keep_lines=True 时保留源文件的换行（每行一块），否则用空格拼成一段。
+    答题纸排版必须用 keep_lines=True，否则步骤会被挤在一起。
 
     返回 [{"no": "1", "question": "...", "answer": "..."}]
     """
@@ -314,7 +317,7 @@ def parse_qa(text):
         if m and not stripped.startswith(QA_ANSWER_PREFIXES):
             if cur is not None:
                 cur["question"] = " ".join(buf_q).strip()
-                cur["answer"] = " ".join(buf_a).strip()
+                cur["answer"] = ('\n' if keep_lines else " ").join(buf_a).strip()
                 items.append(cur)
             cur = {"no": m.group(1), "question": m.group(2).strip(), "answer": ""}
             buf_q = [m.group(2).strip()] if m.group(2).strip() else []
@@ -340,7 +343,7 @@ def parse_qa(text):
             buf_q.append(stripped)
     if cur is not None:
         cur["question"] = " ".join(buf_q).strip()
-        cur["answer"] = " ".join(buf_a).strip()
+        cur["answer"] = ('\n' if keep_lines else " ").join(buf_a).strip()
         items.append(cur)
     return items
 

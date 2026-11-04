@@ -56,7 +56,9 @@ def build_blocks(items, indent, with_question, answer_prefix):
         if not ans:
             continue
         body = (answer_prefix + ans) if (answer_prefix and with_question) else ans
-        blocks.append((body, indent))
+        # 按源文件的换行拆块：一行一步，段落之间留空行（不要挤成一段）
+        for ln in body.split(chr(10)):
+            blocks.append((ln.strip(), indent))
         blocks.append(("", 0))
     return blocks
 
@@ -122,7 +124,7 @@ def main(argv=None):
     args.font_index = args.font_index or 0
 
     text = args.qa_text if args.qa_text is not None else Path(args.qa).read_text(encoding="utf-8")
-    items = R.parse_qa(text)
+    items = R.parse_qa(text, keep_lines=True)
     if not items:
         print("没解析出任何题目，检查一下输入格式", file=sys.stderr)
         return 2
