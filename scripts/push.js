@@ -33,7 +33,11 @@ function deadlineDays(deadline, semesterEnd) {
   if (!m) return 998;
   const now = new Date();
   const d = new Date(now.getFullYear(), Number(m[1]) - 1, Number(m[2]), 23, 59);
-  return Math.round((d - now) / 86400000);
+  // 按自然日算今天/明天/已过期：截止点常是 23:00，按小数天四舍五入会把
+  // 「昨天截止」算成 0 天而误报「今天截止」
+  const a = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const b = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  return Math.round((b - a) / 86400000);
 }
 
 function main() {
@@ -74,7 +78,10 @@ if (!FORCE && st.lastDate === today && !process.argv.includes('--daily')) {
   } else {
     lines.push(`学习通未交 ${pending.length} 项(扫描 ${stamp(scanAt)}):`);
     for (const p of pending) {
-      const dtag = p.days <= 0 ? '今天截止!' : p.days <= 3 ? `还剩 ${p.days} 天` : (p.days >= 900 ? '学期末' : `还剩 ${p.days} 天`);
+      const dtag = p.days < 0 ? `已过期 ${-p.days} 天`
+        : p.days === 0 ? '今天截止!'
+        : p.days === 1 ? '明天截止!'
+        : (p.days >= 900 ? '学期末' : `还剩 ${p.days} 天`);
       lines.push(`· ${p.course} / ${p.name} — ${dtag}${p.deadline ? ' (' + p.deadline + ')' : ''}`);
     }
   }
