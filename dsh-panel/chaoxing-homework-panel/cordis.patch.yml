@@ -1,0 +1,7 @@
+# 作业数据默认从以下位置读取（取最新一份）：
+#   CX_RESULT 环境变量 → ~/.chaoxing-homework/result.json（技能默认）
+#   → ~/.openclaw/workspace/tools/chaoxing/result.json
+# 需要指定位置时给本行加 config: { resultPath: /绝对路径/result.json }
+- insert:
+    - id: chaoxing-homework-panel
+      name: '@local/chaoxing-homework-panel'

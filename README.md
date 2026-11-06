@@ -37,7 +37,22 @@ lib/                          路径与浏览器、通知的公共层
 skills/handwriting-homework/  模拟笔迹：采样照片 → 生成个人字库 → 渲染答题纸
 references/                   踩坑清单与题型分流细则
 examples/launchd.plist        macOS 定时推送示例
+dsh-panel/                    DSH 左侧「学习通自动化」作业看板（见 dsh-panel/README.md）
 ```
+
+---
+
+## DSH 界面：学习通自动化作业看板（2026-11-06 更新）
+
+不想翻每天推送的待办对话，可以直接在 DeepSeek Harness 左侧看作业卡片：
+左侧「自动化任务」下方多一个 **「学习通自动化」** 入口，点开是一页作业看板，
+每张卡片显示课程、作业名、**是否已提交**、**截止日期**与剩余时间；
+点卡片直接新标签打开学习通该作业页（扫描结果里的 `taskUrl`）。
+支持全部 / 未交 / 已交筛选、搜索、手动刷新，并每 60 秒自动重读本机最新扫描结果。
+
+- 插件源码：`dsh-panel/chaoxing-homework-panel/`
+- 安装与配置：见 [dsh-panel/README.md](dsh-panel/README.md)
+- 数据只读 `scan.js` 产出的 `result.json`；**默认永远不点「提交」** 的铁律不变。
 
 ---
 

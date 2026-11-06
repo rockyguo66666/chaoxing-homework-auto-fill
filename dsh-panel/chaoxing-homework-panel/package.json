@@ -1,0 +1,23 @@
+{
+  "name": "@local/chaoxing-homework-panel",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "学习通自动化：左侧独立的作业卡片面板",
+  "icon": "./icon.svg",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json"
+  },
+  "files": ["index.js", "client.js", "cordis.patch.yml", "icon.svg", "locale/*.json"],
+  "dsh": {
+    "bundle": { "patch": "./cordis.patch.yml" },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": ["@deepseek-ai/dsh-client-ui-sidebar", "@deepseek-ai/dsh-client-ui-layout"]
+    }
+  }
+}
