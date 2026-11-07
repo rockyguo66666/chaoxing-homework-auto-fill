@@ -21,22 +21,38 @@ const log = (...a) => console.log('[grab]', ...a);
     await page.goto('http://mooc1-1.chaoxing.com/visit/interaction?s=' + s, { timeout: 45000, waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(4500);
     const norm = t => (t || '').replace(/[《》]/g, '');
-    const target = await page.evaluate(({ k }) => {
+    const targets = await page.evaluate(({ k }) => {
+      const nn = t => (t || '').replace(/[《》]/g, '').trim();
       const list = [...document.querySelectorAll('a[href*="stucoursemiddle"]')].map(a => ({ name: (a.innerText || '').trim().replace(/\s+/g, ' '), href: a.href }));
-      return list.find(x => x.name.replace(/[《》]/g, '') === k) || null;
+      // 同名课程可能不止一门，把候选都返回，逐个试
+      const exact = list.filter(x => nn(x.name) === k);
+      const fuzzy = list.filter(x => nn(x.name) !== k && nn(x.name).includes(k));
+      return exact.concat(fuzzy);
     }, { k: norm(KEY) });
-    if (!target) { log('NO_COURSE'); process.exit(3); }
-    await page.goto(target.href, { timeout: 45000, waitUntil: 'domcontentloaded' });
-    await page.waitForTimeout(5000);
-    await page.evaluate(() => { for (const el of [...document.querySelectorAll('a, li, div, span, p')]) { if ((el.innerText || '').trim() === '作业' && el.offsetParent !== null) { el.click(); return; } } });
+    if (!targets.length) { log('NO_COURSE'); process.exit(3); }
     let wf = null;
-    for (let i = 0; i < 12; i++) { await page.waitForTimeout(1500); wf = page.frames().find(f => f.url().includes('/work/')); if (wf) break; }
+    let clicked = false;
+    for (const target of targets) {
+      await page.goto(target.href, { timeout: 45000, waitUntil: 'domcontentloaded' });
+      await page.waitForTimeout(5000);
+      await page.evaluate(() => { for (const el of [...document.querySelectorAll('a, li, div, span, p')]) { if ((el.innerText || '').trim() === '作业' && el.offsetParent !== null) { el.click(); return; } } });
+      wf = null;
+      for (let i = 0; i < 12; i++) { await page.waitForTimeout(1500); wf = page.frames().find(f => f.url().includes('/work/')); if (wf) break; }
+      if (!wf) continue;
+      await wf.waitForTimeout(2000);
+      clicked = await wf.evaluate((workName) => {
+        const nodes = [...document.querySelectorAll('p.overHidden2, div, li, a, span, p, td')];
+        const exact = nodes.filter(e => (e.innerText || '').trim() === workName);
+        const starts = nodes.filter(e => (e.innerText || '').trim().startsWith(workName) && (e.innerText || '').trim().length < workName.length + 14);
+        const el = exact[exact.length - 1] || starts[0];
+        if (!el) return false;
+        let ct = el; for (let i = 0; i < 8 && ct; i++, ct = ct.parentElement) { if (ct.getAttribute('onclick') || ct.tagName === 'A') break; }
+        try { ct.click(); return true; } catch (e) { return false; }
+      }, WORK);
+      if (clicked) break;
+    }
     if (!wf) { log('NO_WORK_FRAME'); process.exit(4); }
-    await wf.waitForTimeout(2000);
-    await wf.evaluate((workName) => {
-      const el = [...document.querySelectorAll('div, li, a, span, p, td')].find(e => (e.innerText || '').trim() === workName);
-      let ct = el; for (let i = 0; i < 6 && ct; i++, ct = ct.parentElement) { if (ct.getAttribute('onclick') || ct.tagName === 'A') break; } ct.click();
-    }, WORK);
+    if (!clicked) { log('NO_WORK_ITEM'); process.exit(5); }
     await page.waitForTimeout(9000);
     const wp = ctx.pages().find(p => p.url().includes('dowork')) || page;
     await wp.waitForTimeout(4000);
